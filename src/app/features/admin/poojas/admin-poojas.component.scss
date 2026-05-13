@@ -1,0 +1,128 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.page-title { font-size: 1.75rem; color: var(--temple-crimson-dk); letter-spacing: 0.03em; }
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.pooja-card {
+  padding: 1.5rem;
+  background: #fff;
+  border: 1.5px solid var(--temple-border);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.09); }
+}
+
+.pooja-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+
+  h3 { font-size: 1rem; color: var(--temple-crimson-dk); }
+}
+
+p {
+  color: var(--temple-ivory-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-serif);
+}
+
+.pooja-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--temple-ivory-dim);
+  margin-bottom: 1rem;
+}
+
+.status {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+
+  &.active {
+    background: rgba(39,174,96,0.1);
+    color: #1E8449;
+    border: 1px solid rgba(39,174,96,0.25);
+  }
+
+  color: var(--temple-crimson);
+  background: rgba(192,57,43,0.08);
+  border: 1px solid rgba(192,57,43,0.2);
+}
+
+.card-actions { display: flex; gap: 0.5rem; }
+
+.action-btn {
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid;
+  font-size: 0.78rem;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  letter-spacing: 0.05em;
+  background: transparent;
+  transition: all 0.2s;
+
+  &.edit {
+    color: var(--temple-gold-dk);
+    border-color: rgba(180,134,11,0.35);
+    &:hover { background: rgba(180,134,11,0.1); }
+  }
+
+  &.delete {
+    color: var(--temple-crimson);
+    border-color: rgba(192,57,43,0.3);
+    &:hover { background: rgba(192,57,43,0.08); }
+  }
+}
+
+// ─── Modal ────────────────────────────────────────────────────────────────────
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal {
+  background: #fff;
+  border: 1.5px solid var(--temple-border);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+
+  h2 { font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--temple-crimson-dk); }
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}

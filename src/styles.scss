@@ -1,0 +1,350 @@
+// ─── Temple colour palette (White Theme) ────────────────────────────────────
+:root {
+  --temple-crimson:      #C0392B;
+  --temple-crimson-lt:   #E74C3C;
+  --temple-crimson-dk:   #922B21;
+  --temple-gold:         #B8860B;
+  --temple-gold-lt:      #D4A017;
+  --temple-gold-dk:      #8B6508;
+  --temple-saffron:      #D4600A;
+  --temple-saffron-lt:   #E8772A;
+  --temple-ivory:        #2C1A0E;
+  --temple-ivory-muted:  #5C3D2E;
+  --temple-ivory-dim:    #8A6A55;
+  --temple-bg:           #FFFFFF;
+  --temple-bg-alt:       #FAFAFA;
+  --temple-bg-card:      #FFFFFF;
+  --temple-bg-raised:    #F5F0EB;
+  --temple-bg-section:   #FDF8F3;
+  --temple-deep:         #FFFFFF;
+  --temple-border:       rgba(180, 134, 11, 0.25);
+  --temple-border-lt:    rgba(180, 134, 11, 0.12);
+  --temple-border-glow:  rgba(180, 134, 11, 0.5);
+
+  --font-heading:    'Cinzel', serif;
+  --font-decorative: 'Cinzel Decorative', serif;
+  --font-serif:      'EB Garamond', Georgia, serif;
+  --font-body:       'Inter', sans-serif;
+
+  --shadow-card:  0 4px 24px rgba(0,0,0,0.08);
+  --shadow-hover: 0 12px 40px rgba(0,0,0,0.14);
+  --shadow-gold:  0 0 30px rgba(180,134,11,0.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--temple-bg);
+  color: var(--temple-ivory);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--temple-crimson-dk);
+  line-height: 1.2;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+// ─── Layout ──────────────────────────────────────────────────────────────────
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section { padding: 6rem 0; }
+
+// ─── Ornamental dividers ─────────────────────────────────────────────────────
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.25rem auto;
+  color: var(--temple-gold);
+  opacity: 0.7;
+
+  &::before, &::after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 60px;
+    background: linear-gradient(90deg, transparent, var(--temple-gold));
+  }
+  &::after { background: linear-gradient(90deg, var(--temple-gold), transparent); }
+
+  span { font-size: 1rem; letter-spacing: 0.5rem; }
+}
+
+.ornament-lg {
+  @extend .ornament;
+  &::before, &::after { width: 100px; }
+  span { font-size: 1.25rem; letter-spacing: 0.75rem; }
+}
+
+// ─── Section headings ────────────────────────────────────────────────────────
+.section-eyebrow {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--temple-saffron);
+  text-align: center;
+  margin-bottom: 0.6rem;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 3.5vw, 2.6rem);
+  color: var(--temple-crimson-dk);
+  text-align: center;
+  margin-bottom: 0;
+  letter-spacing: 0.04em;
+}
+
+.section-subtitle {
+  font-family: var(--font-serif);
+  font-style: italic;
+  text-align: center;
+  color: var(--temple-ivory-muted);
+  margin-top: 0.5rem;
+  margin-bottom: 3.5rem;
+  font-size: 1.1rem;
+}
+
+// ─── Buttons ─────────────────────────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2.25rem;
+  border-radius: 3px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  transition: all 0.28s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.28s;
+    background: rgba(0,0,0,0.06);
+  }
+  &:hover::before { opacity: 1; }
+
+  &-primary {
+    background: linear-gradient(135deg, var(--temple-crimson-dk) 0%, var(--temple-crimson) 50%, var(--temple-crimson-lt) 100%);
+    color: #fff;
+    box-shadow: 0 2px 18px rgba(192,57,43,0.35);
+    &:hover { box-shadow: 0 6px 28px rgba(192,57,43,0.5); transform: translateY(-2px); }
+  }
+
+  &-outline {
+    background: transparent;
+    border: 2px solid var(--temple-crimson);
+    color: var(--temple-crimson);
+    &:hover { background: var(--temple-crimson); color: #fff; }
+  }
+
+  &-outline-light {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.8);
+    color: #fff;
+    &:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
+  }
+
+  &-saffron {
+    background: linear-gradient(135deg, var(--temple-saffron), var(--temple-saffron-lt));
+    color: #fff;
+    box-shadow: 0 2px 18px rgba(212,96,10,0.35);
+    &:hover { box-shadow: 0 6px 28px rgba(212,96,10,0.55); transform: translateY(-2px); }
+  }
+
+  &-crimson {
+    background: linear-gradient(135deg, var(--temple-crimson-dk), var(--temple-crimson-lt));
+    color: #fff;
+    &:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(192,57,43,0.35); }
+  }
+
+  &:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+}
+
+// ─── Cards ───────────────────────────────────────────────────────────────────
+.card {
+  background: var(--temple-bg-card);
+  border: 1px solid var(--temple-border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+// ─── Badges ──────────────────────────────────────────────────────────────────
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  border-radius: 2px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(192, 57, 43, 0.08);
+  color: var(--temple-crimson);
+  border: 1px solid rgba(192,57,43,0.2);
+  font-family: var(--font-heading);
+}
+
+// ─── Decorative border box ───────────────────────────────────────────────────
+.bordered-box {
+  border: 1px solid var(--temple-border);
+  position: relative;
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-color: var(--temple-gold);
+    border-style: solid;
+    opacity: 0.7;
+  }
+  &::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  &::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+}
+
+// ─── Forms ───────────────────────────────────────────────────────────────────
+input, select, textarea {
+  width: 100%;
+  padding: 0.875rem 1.125rem;
+  background: #FAFAFA;
+  border: 1.5px solid rgba(180,134,11,0.3);
+  border-radius: 4px;
+  color: var(--temple-ivory);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+
+  &:focus {
+    border-color: var(--temple-crimson);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(192,57,43,0.1);
+  }
+  &::placeholder { color: var(--temple-ivory-dim); }
+  option { background: #fff; color: var(--temple-ivory); }
+}
+
+label {
+  display: block;
+  color: var(--temple-ivory-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  margin-bottom: 0.45rem;
+  font-family: var(--font-heading);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.form-group { margin-bottom: 1.5rem; }
+
+.error-msg   { color: #C0392B; font-size: 0.85rem; margin-top: 0.5rem; }
+.success-msg { color: #27AE60; font-size: 0.85rem; margin-top: 0.5rem; }
+
+// ─── Scrollbar ───────────────────────────────────────────────────────────────
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #F5F0EB; }
+::-webkit-scrollbar-thumb { background: var(--temple-crimson); border-radius: 3px; }
+
+// ─── Spinner ─────────────────────────────────────────────────────────────────
+.spinner {
+  width: 26px;
+  height: 26px;
+  border: 2px solid rgba(192,57,43,0.18);
+  border-top-color: var(--temple-crimson);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+// ─── Page hero (inner pages) ─────────────────────────────────────────────────
+.page-hero {
+  padding: 9rem 0 5rem;
+  text-align: center;
+  background:
+    linear-gradient(135deg, #fff5f3 0%, #fff9f0 50%, #fffbf5 100%);
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(90deg, transparent, var(--temple-gold), var(--temple-crimson), var(--temple-gold), transparent) 1;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: 'ॐ';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 22rem;
+    opacity: 0.04;
+    color: var(--temple-crimson);
+    pointer-events: none;
+    font-family: serif;
+    line-height: 1;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--temple-gold), var(--temple-crimson), var(--temple-gold), transparent);
+    opacity: 0.6;
+  }
+
+  h1 {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    position: relative;
+    letter-spacing: 0.06em;
+    color: var(--temple-crimson-dk);
+  }
+
+  p {
+    color: var(--temple-ivory-muted);
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    font-family: var(--font-serif);
+    font-style: italic;
+    position: relative;
+  }
+}
+
+// ─── Utilities ───────────────────────────────────────────────────────────────
+.text-center { text-align: center; }
+.mt-3 { margin-top: 2rem; }
+.mt-5 { margin-top: 4rem; }
+.divider-om {
+  text-align: center;
+  color: var(--temple-crimson);
+  opacity: 0.4;
+  letter-spacing: 1.2rem;
+  font-size: 1.1rem;
+  margin: 1rem 0;
+}

@@ -1,0 +1,71 @@
+<div class="page-hero">
+  <div class="page-hero-content">
+    <span class="section-eyebrow">Sacred Calendar</span>
+    <h1>Events & Festivals</h1>
+    <div class="ornament"><span>✦</span></div>
+    <p>Celebrating the divine throughout the year</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    @if (loading()) {
+      <div class="text-center"><span class="spinner"></span></div>
+    } @else {
+      @if (upcoming(events()).length > 0) {
+        <span class="section-eyebrow">Coming Up</span>
+        <h2 class="section-title">Upcoming Events</h2>
+        <div class="ornament"><span>ॐ</span></div>
+        <p class="section-subtitle">Plan your visit around these sacred occasions</p>
+
+        <div class="events-grid">
+          @for (event of upcoming(events()); track event._id) {
+            <div class="event-card" [class.highlight]="event.isHighlight">
+              @if (event.imageUrl) {
+                <div class="event-img-wrap">
+                  <img [src]="event.imageUrl" [alt]="event.title" class="event-img">
+                  <div class="event-img-overlay"></div>
+                  @if (event.isHighlight) {
+                    <span class="event-featured-tag">Featured</span>
+                  }
+                </div>
+              }
+              <div class="event-body">
+                <div class="event-date-row">
+                  <span class="event-date-text">{{ event.startDate | date:'dd MMM yyyy' }}</span>
+                  @if (event.endDate) { <span class="event-date-text"> — {{ event.endDate | date:'dd MMM yyyy' }}</span> }
+                </div>
+                <h3>{{ event.title }}</h3>
+                <p>{{ event.description }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (past(events()).length > 0) {
+        <div class="past-section">
+          <span class="section-eyebrow">Archive</span>
+          <h2 class="section-title mt-5">Past Events</h2>
+          <div class="ornament"><span>✦</span></div>
+          <div class="past-events">
+            @for (event of past(events()); track event._id) {
+              <div class="past-event-item">
+                <span class="past-date">{{ event.startDate | date:'dd MMM yyyy' }}</span>
+                <span class="past-divider">—</span>
+                <span class="past-name">{{ event.title }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (events().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">🔱</div>
+          <p>No events listed at the moment. Check back soon.</p>
+        </div>
+      }
+    }
+  </div>
+</section>

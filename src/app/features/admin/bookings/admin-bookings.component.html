@@ -1,0 +1,87 @@
+<div class="admin-page">
+  <div class="page-header">
+    <h1 class="page-title">Bookings</h1>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <div class="source-tabs">
+      <button class="tab-btn" [class.active]="sourceFilter() === 'all'" (click)="setSource('all')">All</button>
+      <button class="tab-btn online" [class.active]="sourceFilter() === 'online'" (click)="setSource('online')">🌐 Online</button>
+      <button class="tab-btn offline" [class.active]="sourceFilter() === 'offline'" (click)="setSource('offline')">🏛️ Offline</button>
+    </div>
+    <div class="date-filters">
+      <div class="form-group">
+        <label>From</label>
+        <input type="date" [(ngModel)]="fromDate" name="from">
+      </div>
+      <div class="form-group">
+        <label>To</label>
+        <input type="date" [(ngModel)]="toDate" name="to">
+      </div>
+      <button class="btn btn-primary filter-apply-btn" (click)="applyDateFilter()">Apply</button>
+      <button class="btn btn-outline filter-apply-btn" (click)="clearFilters()">Clear</button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading"><span class="spinner"></span></div>
+  } @else if (filtered().length === 0) {
+    <p class="empty">No bookings found.</p>
+  } @else {
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Pooja</th>
+            <th>Deity</th>
+            <th>Devotees</th>
+            <th>Date</th>
+            <th>Contact</th>
+            <th>Phone</th>
+            <th>Amount</th>
+            <th>Receipt</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (b of filtered(); track b._id) {
+            <tr>
+              <td>
+                @if (b.bookingSource === 'offline') {
+                  <span class="badge source-offline">🏛️ Offline</span>
+                } @else {
+                  <span class="badge source-online">🌐 Online</span>
+                }
+              </td>
+              <td>
+                {{ b.poojaName }}
+                @if (b.extraPoojaNames && b.extraPoojaNames.length) {
+                  <br><small style="color:var(--temple-ivory-dim)">+ {{ b.extraPoojaNames.join(', ') }}</small>
+                }
+              </td>
+              <td>{{ b.deityName || '—' }}</td>
+              <td>{{ b.devotees.length }} devotee(s)</td>
+              <td>{{ b.bookedDate | date:'dd MMM yyyy' }}</td>
+              <td>{{ b.contactName }}</td>
+              <td>{{ b.contactPhone }}</td>
+              <td>₹{{ b.amount }}</td>
+              <td class="receipt-cell">{{ b.receiptNumber || '—' }}</td>
+              <td><span class="badge" [class]="'pay-'+b.paymentStatus">{{ b.paymentStatus }}</span></td>
+              <td><span class="badge" [class]="'status-'+b.status">{{ b.status }}</span></td>
+              <td class="actions">
+                @if (b.status === 'confirmed') {
+                  <button class="action-btn complete" (click)="updateStatus(b._id, 'completed')">Complete</button>
+                  <button class="action-btn cancel" (click)="updateStatus(b._id, 'cancelled')">Cancel</button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

@@ -1,0 +1,171 @@
+<!-- ══════════════════════════ HERO ══════════════════════════ -->
+<section class="hero" [ngStyle]="heroStyle()">
+  <div class="hero-overlay"></div>
+  <div class="hero-particles"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">ॐ नमः शिवाय</p>
+    <h1 class="hero-title">Shivakali Amba<br><span>Bhagavathi Temple</span></h1>
+    <div class="hero-ornament">
+      <span class="ho-line"></span>
+      <span class="ho-diamond">✦</span>
+      <span class="ho-line"></span>
+    </div>
+    <p class="hero-location">Haripad · Alappuzha · Kerala</p>
+    <p class="hero-desc">A sacred abode of divine feminine power — where Goddess Kali and Durga bless their devotees with courage, protection, and eternal liberation.</p>
+    <div class="hero-actions">
+      <a routerLink="/book-pooja" class="btn btn-primary">Book a Pooja</a>
+      <a routerLink="/deities" class="btn btn-outline-light">Our Deities</a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span class="scroll-dot"></span>
+  </div>
+</section>
+
+<!-- ══════════════════ DAILY TIMINGS STRIP ══════════════════ -->
+<section class="timings-strip">
+  <div class="container">
+    <div class="timings-header">
+      <span class="section-eyebrow">Sacred Schedule</span>
+      <h2 class="section-title">Daily Puja Timings</h2>
+      <div class="ornament"><span>ॐ</span></div>
+    </div>
+    <div class="timings-grid">
+      @for (t of pujaTimings; track t.time) {
+        <div class="timing-card">
+          <div class="timing-top">
+            <span class="timing-dot"></span>
+            <span class="timing-time">{{ t.time }}</span>
+          </div>
+          <span class="timing-name">{{ t.name }}</span>
+          <span class="timing-deity">{{ t.deity }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ DEITIES ══════════════════════════ -->
+<section class="deities-section section">
+  <div class="container">
+    <span class="section-eyebrow">Divine Presence</span>
+    <h2 class="section-title">Our Deities</h2>
+    <div class="ornament"><span>✦</span></div>
+    <p class="section-subtitle">The guardians of Haripad, keepers of cosmic order</p>
+
+    <div class="deities-grid">
+      <div class="deity-card">
+        <div class="deity-card-inner">
+          <div class="deity-symbol-wrap kali">
+            <span class="deity-symbol-text">🔱</span>
+            <div class="deity-symbol-ring"></div>
+          </div>
+          <div class="deity-card-body">
+            <h3>Goddess Kali</h3>
+            <p class="deity-epithet">Primary Deity · Mahakali · Bhadrakali</p>
+            <p>The fierce yet compassionate Mother — destroyer of ego and liberator of souls. Her divine presence at this temple embodies the synthesis of Shiva and Shakti.</p>
+            <a routerLink="/deities" class="deity-link">Explore Deity <span>→</span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="deity-card">
+        <div class="deity-card-inner">
+          <div class="deity-symbol-wrap durga">
+            <span class="deity-symbol-text">⚔️</span>
+            <div class="deity-symbol-ring"></div>
+          </div>
+          <div class="deity-card-body">
+            <h3>Goddess Durga</h3>
+            <p class="deity-epithet">Amba Bhagavathi · Chandika · Warrior Mother</p>
+            <p>The invincible warrior who vanquishes darkness and restores dharma. Her Thidambu Nritham rituals connect devotees to Kerala's ancient temple arts.</p>
+            <a routerLink="/deities" class="deity-link">Explore Deity <span>→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FEATURED POOJAS ══════════════════════ -->
+@if (poojas().length > 0) {
+<section class="poojas-section section">
+  <div class="poojas-bg-overlay"></div>
+  <div class="container poojas-container">
+    <span class="section-eyebrow">Sacred Rituals</span>
+    <h2 class="section-title">Featured Poojas</h2>
+    <div class="ornament"><span>ॐ</span></div>
+    <p class="section-subtitle">Experience divine blessings through time-honoured rituals</p>
+
+    <div class="poojas-grid">
+      @for (pooja of poojas(); track pooja._id) {
+        <div class="pooja-card">
+          <div class="pooja-card-top">
+            <span class="pooja-deity-tag">{{ pooja.deity }}</span>
+            <h3>{{ pooja.name }}</h3>
+            @if (pooja.duration) {
+              <span class="pooja-duration">⏱ {{ pooja.duration }}</span>
+            }
+          </div>
+          <p class="pooja-desc">{{ pooja.description }}</p>
+          <div class="pooja-card-footer">
+            <span class="pooja-price">₹{{ pooja.price }}</span>
+            <a routerLink="/book-pooja" [queryParams]="{pooja: pooja._id}" class="btn btn-primary">Book Now</a>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="text-center mt-3">
+      <a routerLink="/book-pooja" class="btn btn-outline">View All Poojas</a>
+    </div>
+  </div>
+</section>
+}
+
+<!-- ════════════════ EVENTS STRIP ════════════════ -->
+@if (events().length > 0) {
+<section class="events-section section">
+  <div class="container">
+    <span class="section-eyebrow">Sacred Calendar</span>
+    <h2 class="section-title">Upcoming Events</h2>
+    <div class="ornament"><span>✦</span></div>
+    <p class="section-subtitle">Join us in celebrating the sacred festivals of the temple</p>
+
+    <div class="events-list">
+      @for (event of events(); track event._id) {
+        <div class="event-item" [class.featured]="event.isHighlight">
+          <div class="event-date-block">
+            <span class="event-day">{{ event.startDate | date:'dd' }}</span>
+            <span class="event-month">{{ event.startDate | date:'MMM yyyy' }}</span>
+          </div>
+          <div class="event-item-divider"></div>
+          <div class="event-info">
+            <h3>{{ event.title }}</h3>
+            <p>{{ event.description }}</p>
+          </div>
+          @if (event.isHighlight) {
+            <span class="badge">Festival</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="text-center mt-3">
+      <a routerLink="/events" class="btn btn-outline">All Events & Festivals</a>
+    </div>
+  </div>
+</section>
+}
+
+<!-- ════════════════ DONATIONS CTA ════════════════ -->
+<section class="donations-cta">
+  <div class="cta-overlay"></div>
+  <div class="container cta-inner">
+    <span class="section-eyebrow">Seva & Devotion</span>
+    <h2>Support the Temple</h2>
+    <div class="ornament-lg"><span>ॐ ✦ ॐ</span></div>
+    <p>Your generous offerings help sustain the temple, conduct sacred festivals, support the priesthood, and serve the community. Every act of giving is a step on the path of dharma.</p>
+    <a routerLink="/donations" class="btn btn-saffron">Make a Donation</a>
+  </div>
+</section>

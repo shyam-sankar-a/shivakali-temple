@@ -1,0 +1,48 @@
+<div class="admin-page">
+  <div class="page-header">
+    <h1 class="page-title">Gallery</h1>
+    <button class="btn btn-primary" (click)="openAdd()">+ Add Image</button>
+  </div>
+
+  <div class="gallery-grid">
+    @for (img of images(); track img._id) {
+      <div class="card img-card">
+        <img [src]="img.imageUrl" [alt]="img.title || 'Image'" class="thumb">
+        <div class="img-info">
+          <span class="img-title">{{ img.title || '—' }}</span>
+          <span class="badge">{{ img.category }}</span>
+        </div>
+        <div class="card-actions">
+          <button class="action-btn edit" (click)="openEdit(img)">Edit</button>
+          <button class="action-btn delete" (click)="delete(img._id)">Delete</button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+@if (showForm()) {
+  <div class="modal-overlay" (click)="closeForm()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>{{ editing() ? 'Edit' : 'Add' }} Image</h2>
+      <div class="form-group">
+        <label>Upload Image *</label>
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" [disabled]="uploading()">
+        @if (uploading()) { <span class="upload-hint">Uploading…</span> }
+        @if (form.imageUrl) { <img [src]="form.imageUrl" alt="Preview" class="img-preview"> }
+      </div>
+      <div class="form-group"><label>Title</label><input type="text" [(ngModel)]="form.title"></div>
+      <div class="form-group">
+        <label>Category</label>
+        <select [(ngModel)]="form.category">
+          @for (c of categories; track c) { <option [value]="c">{{ c | titlecase }}</option> }
+        </select>
+      </div>
+      <div class="form-group"><label>Sort Order</label><input type="number" [(ngModel)]="form.sortOrder"></div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" (click)="closeForm()">Cancel</button>
+        <button class="btn btn-primary" (click)="save()">{{ editing() ? 'Update' : 'Add' }}</button>
+      </div>
+    </div>
+  </div>
+}

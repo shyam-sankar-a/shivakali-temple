@@ -1,0 +1,44 @@
+<div class="admin-page">
+  <div class="page-header">
+    <h1 class="page-title">Events & Festivals</h1>
+    <button class="btn btn-primary" (click)="openAdd()">+ Add Event</button>
+  </div>
+
+  <div class="events-list">
+    @for (event of events(); track event._id) {
+      <div class="card event-row">
+        <div class="event-date-col">
+          <span>{{ event.startDate | date:'dd MMM yyyy' }}</span>
+          @if (event.endDate) { <span class="end-date">– {{ event.endDate | date:'dd MMM' }}</span> }
+        </div>
+        <div class="event-info">
+          <h3>{{ event.title }}</h3>
+          <p>{{ event.description }}</p>
+        </div>
+        @if (event.isHighlight) { <span class="badge featured">Featured</span> }
+        <div class="card-actions">
+          <button class="action-btn edit" (click)="openEdit(event)">Edit</button>
+          <button class="action-btn delete" (click)="delete(event._id)">Delete</button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+@if (showForm()) {
+  <div class="modal-overlay" (click)="closeForm()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>{{ editing() ? 'Edit' : 'Add' }} Event</h2>
+      <div class="form-group"><label>Title *</label><input type="text" [(ngModel)]="form.title"></div>
+      <div class="form-group"><label>Description</label><textarea [(ngModel)]="form.description" rows="3"></textarea></div>
+      <div class="form-group"><label>Start Date *</label><input type="date" [(ngModel)]="form.startDate"></div>
+      <div class="form-group"><label>End Date</label><input type="date" [(ngModel)]="form.endDate"></div>
+      <div class="form-group"><label>Image URL</label><input type="url" [(ngModel)]="form.imageUrl"></div>
+      <label class="checkbox-label"><input type="checkbox" [(ngModel)]="form.isHighlight"> Featured Event</label>
+      <div class="modal-actions">
+        <button class="btn btn-outline" (click)="closeForm()">Cancel</button>
+        <button class="btn btn-primary" (click)="save()">{{ editing() ? 'Update' : 'Create' }}</button>
+      </div>
+    </div>
+  </div>
+}

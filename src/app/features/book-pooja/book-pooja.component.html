@@ -1,0 +1,356 @@
+<div class="page-hero">
+  <h1>Book a Pooja</h1>
+  <p>Offer your prayers through a sacred ritual</p>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    @if (loading()) {
+      <div class="text-center"><span class="spinner"></span></div>
+    } @else {
+
+      <!-- Progress Stepper -->
+      <div class="stepper">
+        <div class="stepper-step" [class.active]="true" [class.done]="hasSelections()">
+          <div class="stepper-circle">
+            @if (hasSelections()) { <span>✓</span> } @else { <span>1</span> }
+          </div>
+          <div class="stepper-label">Select Poojas</div>
+        </div>
+        <div class="stepper-line" [class.done]="hasSelections()"></div>
+        <div class="stepper-step" [class.active]="hasSelections()" [class.done]="hasSelections() && !!selectedDeity()">
+          <div class="stepper-circle">
+            @if (hasSelections() && selectedDeity()) { <span>✓</span> } @else { <span>2</span> }
+          </div>
+          <div class="stepper-label">Select Deity</div>
+        </div>
+        <div class="stepper-line" [class.done]="hasSelections() && !!selectedDeity()"></div>
+        <div class="stepper-step" [class.active]="hasSelections()" [class.done]="hasSelections() && devotees[0].name">
+          <div class="stepper-circle">
+            @if (hasSelections() && devotees[0].name) { <span>✓</span> } @else { <span>3</span> }
+          </div>
+          <div class="stepper-label">Devotees</div>
+        </div>
+        <div class="stepper-line" [class.done]="hasSelections() && devotees[0].name"></div>
+        <div class="stepper-step" [class.active]="hasSelections() && !!devotees[0].name" [class.done]="hasSelections() && !!devotees[0].name && !!bookedDate && !!contactName && !!contactPhone">
+          <div class="stepper-circle">
+            @if (hasSelections() && !!devotees[0].name && !!bookedDate && !!contactName && !!contactPhone) { <span>✓</span> } @else { <span>4</span> }
+          </div>
+          <div class="stepper-label">Contact &amp; Date</div>
+        </div>
+        <div class="stepper-line"></div>
+        <div class="stepper-step" [class.active]="hasSelections()">
+          <div class="stepper-circle"><span>5</span></div>
+          <div class="stepper-label">Payment</div>
+        </div>
+      </div>
+
+      <!-- ── Step 1: Select Poojas ── -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-header-text">
+            <h2>Select Poojas</h2>
+            <p>You can select one or more poojas</p>
+          </div>
+          @if (selectedPoojas().length) {
+            <div class="step-badge">{{ selectedPoojas().length }} selected</div>
+          }
+        </div>
+        <div class="poojas-grid">
+          @for (pooja of poojas(); track pooja._id) {
+            <div class="pooja-option" [class.selected]="isPoojaSelected(pooja)" (click)="togglePooja(pooja)">
+              <div class="pooja-option-check">
+                @if (isPoojaSelected(pooja)) { <span class="check-icon">✓</span> }
+              </div>
+              <div class="pooja-deity-tag">{{ pooja.deity }}</div>
+              <h3>{{ pooja.name }}</h3>
+              <p>{{ pooja.description }}</p>
+              @if (pooja.timings && pooja.timings.length) {
+                <div class="pooja-timings">
+                  @for (t of pooja.timings; track t) {
+                    <span class="badge">{{ t }}</span>
+                  }
+                </div>
+              }
+              <div class="pooja-price-row">
+                <span class="price">₹{{ pooja.price }}</span>
+                @if (pooja.duration) { <span class="duration">⏱ {{ pooja.duration }}</span> }
+              </div>
+            </div>
+          }
+        </div>
+
+        @if (selectedPoojas().length) {
+          <div class="selected-summary">
+            <span class="selected-summary-label">Selected:</span>
+            @for (p of selectedPoojas(); track p._id) {
+              <span class="selected-tag">{{ p.name }} <button class="tag-remove" (click)="togglePooja(p)">✕</button></span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- ── Step 2: Select Deity ── -->
+      @if (deities().length > 0) {
+        <div class="step-card" [class.step-disabled]="!hasSelections()">
+          <div class="step-header">
+            <div class="step-num">2</div>
+            <div class="step-header-text">
+              <h2>Select Deity</h2>
+              <p>Choose the deity for your offering (optional)</p>
+            </div>
+            @if (selectedDeity()) {
+              <div class="step-badge">{{ selectedDeity()!.iconEmoji }} {{ selectedDeity()!.name }}</div>
+            }
+          </div>
+
+          <div class="deity-grid">
+            <div
+              class="deity-option"
+              [class.selected]="selectedDeity() === null"
+              (click)="selectDeity(null)">
+              <div class="deity-check">
+                @if (!selectedDeity()) { <span class="check-icon">✓</span> }
+              </div>
+              <div class="deity-emoji-display">🙏</div>
+              <div class="deity-option-name">No Preference</div>
+              <div class="deity-option-desc">Perform for all deities</div>
+            </div>
+            @for (deity of deities(); track deity._id) {
+              <div
+                class="deity-option"
+                [class.selected]="isDeitySelected(deity)"
+                (click)="selectDeity(deity)">
+                <div class="deity-check">
+                  @if (isDeitySelected(deity)) { <span class="check-icon">✓</span> }
+                </div>
+                <div class="deity-emoji-display">{{ deity.iconEmoji }}</div>
+                <div class="deity-option-name">{{ deity.name }}</div>
+                @if (deity.description) {
+                  <div class="deity-option-desc">{{ deity.description }}</div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- ── Step 3: Devotees ── -->
+      <div class="step-card" [class.step-disabled]="!hasSelections()">
+        <div class="step-header">
+          <div class="step-num">{{ deities().length > 0 ? 3 : 2 }}</div>
+          <div class="step-header-text">
+            <h2>Devotee Details</h2>
+            <p>Add names and birth stars of all devotees</p>
+          </div>
+        </div>
+
+        <div class="devotees-list">
+          @for (devotee of devotees; track $index; let i = $index) {
+            <div class="devotee-card">
+              <div class="devotee-card-header">
+                <div class="devotee-icon">🙏</div>
+                <span class="devotee-label">Devotee {{ i + 1 }}</span>
+                @if (devotees.length > 1) {
+                  <button class="remove-devotee-btn" (click)="removeDevotee(i)" title="Remove devotee">✕</button>
+                }
+              </div>
+              <div class="devotee-fields">
+                <div class="form-group">
+                  <label>Full Name <span class="req">*</span></label>
+                  <input type="text" [(ngModel)]="devotee.name" [name]="'dname_' + i" placeholder="e.g. Ramakrishnan P" required>
+                </div>
+                <div class="form-group">
+                  <label>Birth Star (Nakshatra) <span class="req">*</span></label>
+                  <select [(ngModel)]="devotee.nakshatra" [name]="'dnak_' + i" required>
+                    <option value="" disabled>Select nakshatra</option>
+                    @for (n of nakshatras; track n) {
+                      <option [value]="n">{{ n }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Phone Number <span class="label-hint">(optional)</span></label>
+                  <input type="tel" [(ngModel)]="devotee.phone" [name]="'dphone_' + i" placeholder="+91 XXXXX XXXXX">
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <button class="btn btn-add-devotee" (click)="addDevotee()" [disabled]="!hasSelections()">
+          <span class="add-icon">+</span> Add Another Devotee
+        </button>
+      </div>
+
+      <!-- ── Step 4: Date & Contact ── -->
+      <div class="step-card" [class.step-disabled]="!hasSelections()">
+        <div class="step-header">
+          <div class="step-num">{{ deities().length > 0 ? 4 : 3 }}</div>
+          <div class="step-header-text">
+            <h2>Date &amp; Contact Details</h2>
+            <p>When would you like to perform the pooja?</p>
+          </div>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-col">
+            <div class="contact-col-title">
+              <span class="col-icon">📅</span> Booking Date
+            </div>
+            <div class="form-group">
+              <label>Preferred Date <span class="req">*</span></label>
+              <input type="date" [(ngModel)]="bookedDate" name="bookedDate" [min]="minDate()" required>
+            </div>
+          </div>
+
+          <div class="contact-col">
+            <div class="contact-col-title">
+              <span class="col-icon">👤</span> Primary Contact
+            </div>
+            <div class="form-group">
+              <label>Your Full Name <span class="req">*</span></label>
+              <input type="text" [(ngModel)]="contactName" name="contactName" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+              <label>Mobile Number <span class="req">*</span> <span class="label-hint">SMS confirmation will be sent</span></label>
+              <input type="tel" [(ngModel)]="contactPhone" name="contactPhone" placeholder="+91 XXXXX XXXXX" required>
+            </div>
+            <div class="form-group">
+              <label>Email Address <span class="label-hint">optional — email confirmation</span></label>
+              <input type="email" [(ngModel)]="contactEmail" name="contactEmail" placeholder="your@email.com">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group notes-group">
+          <label>Special Instructions <span class="label-hint">optional</span></label>
+          <textarea [(ngModel)]="notes" name="notes" rows="3" placeholder="Any special requests, dietary needs, or specific timings..."></textarea>
+        </div>
+      </div>
+
+      <!-- ── Step 5: Payment Method ── -->
+      <div class="step-card" [class.step-disabled]="!hasSelections()">
+        <div class="step-header">
+          <div class="step-num">{{ deities().length > 0 ? 5 : 4 }}</div>
+          <div class="step-header-text">
+            <h2>Payment Method</h2>
+            <p>Choose how you'd like to pay</p>
+          </div>
+        </div>
+
+        <div class="payment-options">
+          <label class="payment-option" [class.selected]="paymentMethod === 'pay_at_temple'">
+            <input type="radio" [(ngModel)]="paymentMethod" name="paymentMethod" value="pay_at_temple">
+            <div class="payment-icon-wrap">🏛️</div>
+            <div class="payment-text">
+              <strong>Pay at Temple</strong>
+              <small>Confirm your slot now, pay when you arrive</small>
+            </div>
+            <div class="payment-check" [class.visible]="paymentMethod === 'pay_at_temple'">✓</div>
+          </label>
+
+          <label class="payment-option" [class.selected]="paymentMethod === 'online'">
+            <input type="radio" [(ngModel)]="paymentMethod" name="paymentMethod" value="online">
+            <div class="payment-icon-wrap">💳</div>
+            <div class="payment-text">
+              <strong>Pay Online</strong>
+              <small>Secure payment via Stripe — instant confirmation</small>
+            </div>
+            <div class="payment-check" [class.visible]="paymentMethod === 'online'">✓</div>
+          </label>
+        </div>
+      </div>
+
+      <!-- ── Booking Summary ── -->
+      @if (hasSelections()) {
+        <div class="summary-card">
+          <div class="summary-card-header">
+            <span class="summary-om">ॐ</span>
+            <h3>Booking Summary</h3>
+          </div>
+
+          <div class="summary-section">
+            <div class="summary-section-title">Poojas</div>
+            @for (p of selectedPoojas(); track p._id) {
+              <div class="summary-row">
+                <span>{{ p.name }} <span class="summary-deity">({{ p.deity }})</span></span>
+                <span class="summary-amount">₹{{ p.price }}</span>
+              </div>
+            }
+          </div>
+
+          @if (selectedDeity()) {
+            <div class="summary-section">
+              <div class="summary-section-title">Deity</div>
+              <div class="summary-row">
+                <span>{{ selectedDeity()!.iconEmoji }} {{ selectedDeity()!.name }}</span>
+                <span class="summary-nakshatra">Selected</span>
+              </div>
+            </div>
+          }
+
+          @if (devotees[0].name) {
+            <div class="summary-section">
+              <div class="summary-section-title">Devotees</div>
+              @for (d of devotees; track $index) {
+                @if (d.name) {
+                  <div class="summary-row">
+                    <span>{{ d.name }}</span>
+                    <span class="summary-nakshatra">{{ d.nakshatra || '—' }}</span>
+                  </div>
+                }
+              }
+            </div>
+          }
+
+          @if (bookedDate || contactName) {
+            <div class="summary-section">
+              <div class="summary-section-title">Details</div>
+              @if (bookedDate) {
+                <div class="summary-row"><span>Date</span><span>{{ bookedDate }}</span></div>
+              }
+              @if (contactName) {
+                <div class="summary-row"><span>Contact</span><span>{{ contactName }}</span></div>
+              }
+              @if (contactPhone) {
+                <div class="summary-row"><span>Phone</span><span>{{ contactPhone }}</span></div>
+              }
+              <div class="summary-row"><span>Payment</span><span>{{ paymentMethod === 'online' ? 'Online' : 'At Temple' }}</span></div>
+            </div>
+          }
+
+          <div class="summary-total">
+            <span>Total Amount</span>
+            <span class="total-amount">₹{{ totalAmount() }}</span>
+          </div>
+        </div>
+      }
+
+      @if (error()) {
+        <div class="error-banner">
+          <span>⚠️</span> {{ error() }}
+        </div>
+      }
+
+      <div class="submit-row">
+        <button
+          class="btn btn-primary btn-lg"
+          (click)="submit()"
+          [disabled]="submitting() || !hasSelections()">
+          @if (submitting()) {
+            <span class="spinner"></span>&nbsp; Processing...
+          } @else {
+            {{ paymentMethod === 'online' ? '💳 Proceed to Payment' : '🏛️ Confirm Booking' }}
+          }
+        </button>
+        @if (!hasSelections()) {
+          <p class="submit-hint">Please select at least one pooja to continue</p>
+        }
+      </div>
+
+    }
+  </div>
+</section>

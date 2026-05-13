@@ -1,0 +1,78 @@
+<div class="admin-page">
+  <div class="page-header">
+    <h1 class="page-title">Deities</h1>
+    <button class="btn btn-primary" (click)="openAdd()">+ Add Deity</button>
+  </div>
+
+  @if (deities().length === 0) {
+    <p class="empty">No deities configured yet. Add your first deity above.</p>
+  } @else {
+    <div class="cards-grid">
+      @for (deity of deities(); track deity._id) {
+        <div class="card deity-card">
+          <div class="deity-header">
+            <div class="deity-emoji">{{ deity.iconEmoji }}</div>
+            <div class="deity-info">
+              <h3>{{ deity.name }}</h3>
+              <span class="status-badge" [class.active]="deity.isActive">{{ deity.isActive ? 'Active' : 'Inactive' }}</span>
+            </div>
+          </div>
+          @if (deity.description) {
+            <p class="deity-desc">{{ deity.description }}</p>
+          }
+          <div class="deity-meta">
+            <span class="meta-label">Sort Order:</span>
+            <span>{{ deity.sortOrder }}</span>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn edit" (click)="openEdit(deity)">Edit</button>
+            <button class="action-btn delete" (click)="delete(deity._id)">Delete</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+@if (showForm()) {
+  <div class="modal-overlay" (click)="closeForm()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ editing() ? 'Edit' : 'Add' }} Deity</h2>
+        <button class="modal-close" (click)="closeForm()">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label>Name <span class="req">*</span></label>
+        <input type="text" [(ngModel)]="form.name" placeholder="e.g. Kali, Durga, Saraswati">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="form.description" rows="3" placeholder="Brief description of the deity..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Icon Emoji</label>
+          <input type="text" [(ngModel)]="form.iconEmoji" placeholder="🙏" style="font-size:1.5rem;">
+        </div>
+        <div class="form-group">
+          <label>Sort Order</label>
+          <input type="number" [(ngModel)]="form.sortOrder" min="0">
+        </div>
+      </div>
+      <div class="form-group toggle-group">
+        <label class="toggle-label">
+          <input type="checkbox" [(ngModel)]="form.isActive">
+          <span class="toggle-text">Active (visible to devotees)</span>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-outline" (click)="closeForm()">Cancel</button>
+        <button class="btn btn-primary" (click)="save()" [disabled]="!form.name">
+          {{ editing() ? 'Update' : 'Create' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

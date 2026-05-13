@@ -1,0 +1,50 @@
+<div class="page-hero">
+  <div class="page-hero-content">
+    <span class="section-eyebrow">Visual Journey</span>
+    <h1>Gallery</h1>
+    <div class="ornament"><span>✦</span></div>
+    <p>Divine moments captured in time</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="filter-bar">
+      @for (cat of categories; track cat) {
+        <button class="filter-btn" [class.active]="activeCategory() === cat" (click)="filter(cat)">
+          {{ cat | titlecase }}
+        </button>
+      }
+    </div>
+
+    @if (loading()) {
+      <div class="text-center"><span class="spinner"></span></div>
+    } @else if (filtered().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">🖼</div>
+        <p>No images in this category yet.</p>
+      </div>
+    } @else {
+      <div class="gallery-grid">
+        @for (img of filtered(); track img._id) {
+          <div class="gallery-item" (click)="openLightbox(img.imageUrl)">
+            <img [src]="img.imageUrl" [alt]="img.title || 'Temple image'" loading="lazy">
+            <div class="gallery-overlay">
+              <div class="gallery-overlay-content">
+                @if (img.title) { <span class="gallery-title">{{ img.title }}</span> }
+                <span class="zoom-icon">+</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+@if (lightboxImg()) {
+  <div class="lightbox" (click)="closeLightbox()">
+    <button class="lightbox-close" (click)="closeLightbox()">✕</button>
+    <img [src]="lightboxImg()!" (click)="$event.stopPropagation()">
+  </div>
+}

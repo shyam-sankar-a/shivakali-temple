@@ -1,0 +1,231 @@
+<div class="admin-page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">Audit &amp; Finance</h1>
+    <div class="export-buttons">
+      <button class="btn btn-outline export-btn" (click)="exportExcel('combined')" title="Export combined Excel">
+        📊 Export Excel
+      </button>
+      <button class="btn btn-outline export-btn" (click)="exportPdf()" title="Export PDF report">
+        📄 Export PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Date Range Controls -->
+  <div class="filter-card">
+    <div class="preset-row">
+      @for (p of presetList; track p) {
+        <button
+          class="preset-btn"
+          [class.active]="activePreset() === p"
+          (click)="applyPreset(p)">
+          {{ presetLabel(p) }}
+        </button>
+      }
+      <button class="preset-btn" [class.active]="activePreset() === 'custom'" (click)="activePreset.set('custom')">
+        Custom
+      </button>
+    </div>
+    <div class="custom-range" [class.visible]="activePreset() === 'custom'">
+      <div class="date-inputs">
+        <div class="form-group">
+          <label>From</label>
+          <input type="date" [(ngModel)]="fromDate" name="fromDate">
+        </div>
+        <div class="form-group">
+          <label>To</label>
+          <input type="date" [(ngModel)]="toDate" name="toDate">
+        </div>
+        <button class="btn btn-primary" (click)="applyCustom()">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-wrap"><span class="spinner"></span> Loading data...</div>
+  } @else if (summary(); as s) {
+
+    <!-- Summary Cards -->
+    <div class="summary-grid">
+      <div class="summary-card primary">
+        <div class="summary-icon">💰</div>
+        <div class="summary-body">
+          <div class="summary-value">{{ formatCurrency(s.totalRevenue) }}</div>
+          <div class="summary-label">Total Revenue</div>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">🪔</div>
+        <div class="summary-body">
+          <div class="summary-value">{{ formatCurrency(s.poojaRevenue) }}</div>
+          <div class="summary-label">Pooja Revenue</div>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">🤲</div>
+        <div class="summary-body">
+          <div class="summary-value">{{ formatCurrency(s.donationRevenue) }}</div>
+          <div class="summary-label">Donation Revenue</div>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">📋</div>
+        <div class="summary-body">
+          <div class="summary-value">{{ s.totalBookings }}</div>
+          <div class="summary-label">Total Bookings</div>
+          <div class="summary-sub">🌐 {{ s.onlineBookings }} Online · 🏛️ {{ s.offlineBookings }} Offline</div>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">💝</div>
+        <div class="summary-body">
+          <div class="summary-value">{{ s.totalDonations }}</div>
+          <div class="summary-label">Total Donations</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Revenue Chart -->
+    @if (s.dailyRevenue.length > 0) {
+      @let chartMax = maxBarHeight(s.dailyRevenue);
+      <div class="section-card">
+        <h2 class="section-title">Daily Revenue</h2>
+        <div class="chart-wrap">
+          <div class="bar-chart">
+            @for (day of s.dailyRevenue; track day.date) {
+              <div class="bar-group" [title]="day.date + ' — Pooja: ₹' + day.poojaRevenue + ' | Donation: ₹' + day.donationRevenue">
+                <div class="bars">
+                  @if (day.donationRevenue > 0) {
+                    <div class="bar bar-donation" [style.height.%]="barHeightPct(day.donationRevenue, chartMax)"></div>
+                  }
+                  @if (day.poojaRevenue > 0) {
+                    <div class="bar bar-pooja" [style.height.%]="barHeightPct(day.poojaRevenue, chartMax)"></div>
+                  }
+                </div>
+                @if (s.dailyRevenue.length <= 14) {
+                  <div class="bar-label">{{ day.date | slice:5 }}</div>
+                }
+              </div>
+            }
+          </div>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-dot pooja"></span> Pooja</span>
+            <span class="legend-item"><span class="legend-dot donation"></span> Donation</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Tables Row -->
+    <div class="tables-row">
+
+      <!-- By Deity -->
+      @if (s.byDeity.length > 0) {
+        <div class="section-card table-section">
+          <h2 class="section-title">Revenue by Deity</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Deity</th><th>Bookings</th><th>Revenue</th></tr>
+              </thead>
+              <tbody>
+                @for (row of s.byDeity; track row.deity) {
+                  <tr>
+                    <td>{{ row.deity }}</td>
+                    <td>{{ row.count }}</td>
+                    <td class="amount">{{ formatCurrency(row.revenue) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
+      <!-- By Pooja -->
+      @if (s.byPooja.length > 0) {
+        <div class="section-card table-section">
+          <h2 class="section-title">Revenue by Pooja</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Pooja</th><th>Count</th><th>Revenue</th></tr>
+              </thead>
+              <tbody>
+                @for (row of s.byPooja; track row.name) {
+                  <tr>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.count }}</td>
+                    <td class="amount">{{ formatCurrency(row.revenue) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
+      <!-- By Payment Method -->
+      @if (s.byPaymentMethod.length > 0) {
+        <div class="section-card table-section">
+          <h2 class="section-title">Revenue by Payment Method</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Method</th><th>Count</th><th>Revenue</th></tr>
+              </thead>
+              <tbody>
+                @for (row of s.byPaymentMethod; track row.method) {
+                  <tr>
+                    <td class="method-cell">
+                      <span class="method-badge" [class]="'method-' + row.method">{{ row.method }}</span>
+                    </td>
+                    <td>{{ row.count }}</td>
+                    <td class="amount">{{ formatCurrency(row.revenue) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Export section -->
+    <div class="section-card export-section">
+      <h2 class="section-title">Export Data</h2>
+      <div class="export-grid">
+        <div class="export-option">
+          <div class="export-icon">📊</div>
+          <div class="export-info">
+            <strong>Excel Export</strong>
+            <p>Download detailed spreadsheet with all transactions</p>
+          </div>
+          <div class="export-actions">
+            <button class="btn btn-outline" (click)="exportExcel('bookings')">Bookings</button>
+            <button class="btn btn-outline" (click)="exportExcel('donations')">Donations</button>
+            <button class="btn btn-primary" (click)="exportExcel('combined')">Combined</button>
+          </div>
+        </div>
+        <div class="export-option">
+          <div class="export-icon">📄</div>
+          <div class="export-info">
+            <strong>PDF Report</strong>
+            <p>Formatted audit report with summary &amp; transaction details</p>
+          </div>
+          <div class="export-actions">
+            <button class="btn btn-primary" (click)="exportPdf()">Download PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  } @else {
+    <div class="empty-state">
+      <div class="empty-icon">📈</div>
+      <p>No data available for the selected period.</p>
+    </div>
+  }
+</div>

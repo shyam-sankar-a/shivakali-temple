@@ -1,0 +1,108 @@
+.page-title {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  color: var(--temple-crimson-dk);
+  letter-spacing: 0.03em;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1.5px solid var(--temple-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.09); }
+  &.pending { border-color: rgba(212,96,10,0.35); background: #FFFAF5; }
+}
+
+.stat-num {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  color: var(--temple-crimson);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  color: var(--temple-ivory-dim);
+  font-size: 0.8rem;
+  font-family: var(--font-heading);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.recent-section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--temple-crimson-dk);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  background: #fff;
+  border: 1.5px solid var(--temple-border);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  th {
+    text-align: left;
+    padding: 0.875rem 1rem;
+    color: var(--temple-ivory-dim);
+    border-bottom: 1.5px solid var(--temple-border);
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: #FFF9F5;
+  }
+
+  td {
+    padding: 0.875rem 1rem;
+    color: var(--temple-ivory);
+    border-bottom: 1px solid var(--temple-border-lt);
+    font-size: 0.875rem;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(192,57,43,0.03); }
+}
+
+.status-badge {
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: var(--font-heading);
+  letter-spacing: 0.06em;
+
+  &.paid            { background: rgba(39,174,96,0.12);  color: #1E8449; border: 1px solid rgba(39,174,96,0.25); }
+  &.pending         { background: rgba(212,96,10,0.1);   color: var(--temple-saffron); border: 1px solid rgba(212,96,10,0.25); }
+  &.pay_at_temple   { background: rgba(180,134,11,0.1);  color: var(--temple-gold-dk); border: 1px solid rgba(180,134,11,0.25); }
+  &.failed          { background: rgba(192,57,43,0.1);   color: var(--temple-crimson); border: 1px solid rgba(192,57,43,0.25); }
+}
+
+.empty {
+  color: var(--temple-ivory-dim);
+  font-size: 0.9rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  padding: 2rem;
+  text-align: center;
+}

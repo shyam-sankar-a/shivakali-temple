@@ -1,0 +1,92 @@
+<section class="section">
+  <div class="container">
+    <div class="payment-card">
+
+      <!-- ── Pay-at-Temple Confirmation ── -->
+      @if (status() === 'confirmed') {
+        <div class="success-view">
+          <div class="success-icon">🙏</div>
+          <h2>Booking Confirmed!</h2>
+          <p>Your pooja has been successfully booked. Please pay at the temple counter when you arrive.</p>
+          @if (bookingId()) {
+            <div class="booking-ref">Booking Reference: <strong>{{ bookingId() }}</strong></div>
+          }
+          <p class="success-note">A confirmation will be sent to your registered contact details.</p>
+          <div class="action-buttons">
+            <a routerLink="/" class="btn btn-primary">Return to Home</a>
+            <a routerLink="/book-pooja" class="btn btn-outline">Book Another Pooja</a>
+          </div>
+        </div>
+      }
+
+      <!-- ── Online Payment Success ── -->
+      @else if (paymentSuccess()) {
+        <div class="success-view">
+          <div class="success-icon">✅</div>
+          <h2>Payment Successful!</h2>
+          <p>Your payment has been received and your pooja is confirmed. May the goddess bless you and your family.</p>
+          @if (bookingId()) {
+            <div class="booking-ref">Booking Reference: <strong>{{ bookingId() }}</strong></div>
+          }
+          <p class="success-note">A confirmation email has been sent to your registered email address.</p>
+          <div class="action-buttons">
+            <a routerLink="/" class="btn btn-primary">Return to Home</a>
+            <a routerLink="/book-pooja" class="btn btn-outline">Book Another Pooja</a>
+          </div>
+        </div>
+      }
+
+      <!-- ── Stripe Payment Form ── -->
+      @else if (clientSecret()) {
+        <div class="payment-view">
+          <div class="payment-header">
+            <div class="lock-icon">🔒</div>
+            <h2>Complete Payment</h2>
+            <p>Your booking is reserved. Complete payment to confirm.</p>
+          </div>
+
+          @if (bookingId()) {
+            <div class="booking-ref">Booking ID: <strong>{{ bookingId() }}</strong></div>
+          }
+
+          <div class="card-field-wrap">
+            <label class="card-label">Card Details</label>
+            <div #cardElement class="card-element"></div>
+          </div>
+
+          @if (paymentError()) {
+            <div class="payment-error">
+              <span>⚠️</span> {{ paymentError() }}
+            </div>
+          }
+
+          <button
+            class="btn btn-primary btn-pay"
+            (click)="pay()"
+            [disabled]="processing()">
+            @if (processing()) {
+              <span class="spinner"></span>&nbsp; Processing...
+            } @else {
+              💳 Pay Now
+            }
+          </button>
+
+          <p class="secure-note">🔐 Secured by Stripe. We never store your card details.</p>
+        </div>
+      }
+
+      <!-- ── Fallback ── -->
+      @else {
+        <div class="success-view">
+          <div class="success-icon">🙏</div>
+          <h2>Booking Received</h2>
+          <p>Your booking has been received. Please check your email for confirmation details.</p>
+          <div class="action-buttons">
+            <a routerLink="/" class="btn btn-primary">Return to Home</a>
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+</section>

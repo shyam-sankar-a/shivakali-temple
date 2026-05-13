@@ -1,0 +1,22 @@
+<nav class="navbar" [class.scrolled]="scrolled()">
+  <div class="container nav-inner">
+    <a routerLink="/" class="brand" (click)="closeMenu()">
+      <span class="brand-om">ॐ</span>
+      <span class="brand-name">Shivakali Temple</span>
+    </a>
+
+    <ul class="nav-links" [class.open]="menuOpen()">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">Home</a></li>
+      <li><a routerLink="/deities" routerLinkActive="active" (click)="closeMenu()">Deities</a></li>
+      <li><a routerLink="/events" routerLinkActive="active" (click)="closeMenu()">Events</a></li>
+      <li><a routerLink="/gallery" routerLinkActive="active" (click)="closeMenu()">Gallery</a></li>
+      <li><a routerLink="/donations" routerLinkActive="active" (click)="closeMenu()">Donations</a></li>
+      <li><a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">Contact</a></li>
+      <li><a routerLink="/book-pooja" class="btn btn-primary nav-book" (click)="closeMenu()">Book a Pooja</a></li>
+    </ul>
+
+    <button class="hamburger" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>

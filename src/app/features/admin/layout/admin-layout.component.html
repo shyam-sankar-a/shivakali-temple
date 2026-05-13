@@ -1,0 +1,43 @@
+<div class="admin-shell">
+  <aside class="sidebar" [class.collapsed]="!sidebarOpen()">
+    <div class="sidebar-header">
+      <span class="sidebar-om">ॐ</span>
+      @if (sidebarOpen()) {
+        <span class="sidebar-title">Temple Admin</span>
+      }
+    </div>
+
+    <nav class="sidebar-nav">
+      @for (item of navItems; track item.path) {
+        <a [routerLink]="item.path" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">{{ item.icon }}</span>
+          @if (sidebarOpen()) { <span class="nav-label">{{ item.label }}</span> }
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      @if (sidebarOpen()) {
+        <div class="user-info">
+          <span class="user-name">{{ auth.currentUser()?.name }}</span>
+          <span class="user-role">{{ auth.currentUser()?.role }}</span>
+        </div>
+      }
+      <button class="logout-btn" (click)="logout()" title="Logout">🚪</button>
+    </div>
+  </aside>
+
+  <div class="main-area">
+    <header class="admin-header">
+      <button class="toggle-btn" (click)="sidebarOpen.update(v => !v)">☰</button>
+      <span class="header-title">Shivakali Amba Bhagavathi Temple</span>
+      <div class="header-right">
+        <span class="header-user">{{ auth.currentUser()?.name }}</span>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

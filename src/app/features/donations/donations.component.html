@@ -1,0 +1,89 @@
+<div class="page-hero">
+  <div class="page-hero-content">
+    <span class="section-eyebrow">Seva & Offering</span>
+    <h1>Donations</h1>
+    <div class="ornament"><span>🙏</span></div>
+    <p>Your offering is a sacred act of devotion</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <span class="section-eyebrow">Purpose of Giving</span>
+    <h2 class="section-title">How Your Donation Helps</h2>
+    <div class="ornament"><span>ॐ</span></div>
+    <p class="section-subtitle">Every offering, however small, is received with gratitude</p>
+
+    <div class="causes-grid">
+      @for (cause of causes; track cause.title) {
+        <div class="cause-card">
+          <div class="cause-icon-wrap">
+            <span class="cause-icon">{{ cause.icon }}</span>
+          </div>
+          <h3>{{ cause.title }}</h3>
+          <p>{{ cause.description }}</p>
+        </div>
+      }
+    </div>
+
+    <div class="methods-divider">
+      <span class="md-line"></span>
+      <span class="md-text">Ways to Donate</span>
+      <span class="md-line"></span>
+    </div>
+
+    <span class="section-eyebrow">Sacred Giving</span>
+    <h2 class="section-title">Donation Methods</h2>
+    <div class="ornament"><span>✦</span></div>
+
+    <div class="methods-grid">
+      <div class="method-card">
+        <div class="method-header">
+          <span class="method-icon">🏦</span>
+          <h3>Bank Transfer</h3>
+        </div>
+        <div class="bank-details">
+          <div class="bank-row"><span class="bk-label">Bank</span><span class="bk-value">State Bank of India</span></div>
+          <div class="bank-row"><span class="bk-label">Account Name</span><span class="bk-value">Shivakali Amba Bhagavathi Temple</span></div>
+          <div class="bank-row"><span class="bk-label">Account No.</span><span class="bk-value">XXXX XXXX XXXX</span></div>
+          <div class="bank-row"><span class="bk-label">IFSC</span><span class="bk-value">SBIN0XXXXXX</span></div>
+          <div class="bank-row"><span class="bk-label">Branch</span><span class="bk-value">Haripad, Alappuzha</span></div>
+        </div>
+      </div>
+
+      <div class="method-card">
+        <div class="method-header">
+          <span class="method-icon">📱</span>
+          <h3>UPI / QR Code</h3>
+        </div>
+        <div class="upi-section">
+          <div class="qr-box">
+            <span class="qr-inner">QR Code</span>
+            <small>Scan to donate via UPI</small>
+          </div>
+          <p class="upi-id">UPI ID: <strong>temple&#64;upi</strong></p>
+        </div>
+      </div>
+
+      <div class="method-card">
+        <div class="method-header">
+          <span class="method-icon">🤝</span>
+          <h3>In-Person Donation</h3>
+        </div>
+        <p>Visit the temple office during working hours to make a cash or cheque donation. Receipts are issued for all donations above ₹500.</p>
+        <div class="method-hours-box">
+          <span class="hours-label">Office Hours</span>
+          <span class="hours-value">9 AM – 12 PM &amp; 4 PM – 7 PM</span>
+        </div>
+        <p class="method-address">Haripad, Alappuzha District, Kerala — 690514</p>
+      </div>
+    </div>
+
+    <div class="tax-note">
+      <span class="tax-icon">🙏</span>
+      <p>Donations to the temple trust are eligible for tax exemption under <strong>Section 80G</strong> of the Income Tax Act. Please contact the temple office for receipts and documentation.</p>
+    </div>
+
+  </div>
+</section>

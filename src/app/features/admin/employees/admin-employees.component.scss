@@ -1,0 +1,130 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.page-title { font-size: 1.75rem; color: var(--temple-crimson-dk); letter-spacing: 0.03em; }
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.emp-card {
+  padding: 1.5rem;
+  text-align: center;
+  background: #fff;
+  border: 1.5px solid var(--temple-border);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+}
+
+.emp-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem;
+  border: 2.5px solid var(--temple-border);
+}
+
+.emp-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--temple-crimson-dk), var(--temple-crimson));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #fff;
+  font-family: var(--font-heading);
+  margin: 0 auto 1rem;
+  box-shadow: 0 4px 14px rgba(192,57,43,0.25);
+}
+
+.emp-info {
+  h3 { font-size: 1rem; margin-bottom: 0.25rem; color: var(--temple-crimson-dk); }
+  p { color: var(--temple-ivory-muted); font-size: 0.8rem; font-family: var(--font-serif); }
+}
+
+.emp-role {
+  color: var(--temple-saffron);
+  font-size: 0.78rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-heading);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.action-btn {
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid;
+  font-size: 0.78rem;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  letter-spacing: 0.04em;
+  background: transparent;
+  transition: all 0.2s;
+
+  &.edit {
+    color: var(--temple-gold-dk);
+    border-color: rgba(180,134,11,0.35);
+    &:hover { background: rgba(180,134,11,0.1); }
+  }
+
+  &.delete {
+    color: var(--temple-crimson);
+    border-color: rgba(192,57,43,0.3);
+    &:hover { background: rgba(192,57,43,0.08); }
+  }
+}
+
+// ─── Modal ────────────────────────────────────────────────────────────────────
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal {
+  background: #fff;
+  border: 1.5px solid var(--temple-border);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+
+  h2 { font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--temple-crimson-dk); }
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
