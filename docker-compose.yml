@@ -1,0 +1,70 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: sk_mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - temple_net
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sk_api
+    restart: unless-stopped
+    environment:
+      PORT: 5002
+      MONGO_URI: mongodb://mongo:27017/shivakali_temple
+      JWT_SECRET: ${JWT_SECRET:-changeme_use_env_file}
+      CLIENT_URL: ${CLIENT_URL:-http://localhost:4200}
+      MAIL_HOST: ${MAIL_HOST:-mailhog}
+      MAIL_PORT: ${MAIL_PORT:-1025}
+      MAIL_USER: ${MAIL_USER:-}
+      MAIL_PASS: ${MAIL_PASS:-}
+      MAIL_FROM: ${MAIL_FROM:-temple@shivakali.temple}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PHONE: ${ADMIN_PHONE:-}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+      TWILIO_FROM: ${TWILIO_FROM:-}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
+    ports:
+      - "5002:5002"
+    depends_on:
+      - mongo
+    networks:
+      - temple_net
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: sk_frontend
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+    networks:
+      - temple_net
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: sk_mailhog
+    restart: unless-stopped
+    ports:
+      - "8025:8025"
+    networks:
+      - temple_net
+
+volumes:
+  mongo_data:
+
+networks:
+  temple_net:
+    driver: bridge
